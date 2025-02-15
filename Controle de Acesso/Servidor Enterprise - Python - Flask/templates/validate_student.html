@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação de Aluno</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Validação de Aluno</h1>
+    <form id="validationForm">
+        <label for="student_id">ID do Aluno:</label>
+        <input type="text" id="student_id" name="student_id" required>
+        <button type="submit">Validar</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('validationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const studentId = document.getElementById('student_id').value;
+
+            fetch('/validate_student.fcgi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ student_id: studentId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+        });
+    </script>
+</body>
+</html>
